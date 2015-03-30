@@ -1,0 +1,13 @@
+{
+  "name": "puppetfinland-remmina",
+  "version": "0.2.0",
+  "author": "Puppet-Finland team",
+  "license": "BSD license",
+  "summary": "Install and configure Remmina",
+  "source": "https://github.com/Puppet-Finland/remmina.git",
+  "project_page": "https://github.com/Puppet-Finland/remmina",
+  "dependencies": [
+    { "name": "puppetfinland/os", "version_requirement": ">= 0.5.3" },
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.0.0" }
+  ]
+}
