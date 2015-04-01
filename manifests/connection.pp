@@ -25,6 +25,10 @@
 #   connection listing in the Remmina GUI.
 # [*protocol*]
 #   The protocol to use for the connection. Defaults to 'RDP'.
+# [*security*]
+#   Connection security. Valid values 'rdp', 'tls', 'nla'. If left empty, the 
+#   security details are negotiated automatically, which may or may not work. 
+#   Older Windows versions require this to be set to 'rdp'.
 #
 define remmina::connection
 (
@@ -33,7 +37,8 @@ define remmina::connection
     $loginname,
     $enc_password = '',
     $group,
-    $protocol = 'RDP'
+    $protocol = 'RDP',
+    $security = ''
 )
 {
     include remmina::params
@@ -46,10 +51,16 @@ define remmina::connection
                          "set remmina/group ${group}",
                          "set remmina/protocol ${protocol}" ]
 
-    if $enc_password == '' {
-        $changes = $default_changes
+    if $security == '' {
+        $sec_changes = $default_changes
     } else {
-        $changes = concat($default_changes, ["set remmina/password ${enc_password}"])
+        $sec_changes = concat($default_changes, ["set remmina/security ${security}"])
+    }
+
+    if $enc_password == '' {
+        $changes = $sec_changes
+    } else {
+        $changes = concat($sec_changes, ["set remmina/password ${enc_password}"])
     }
 
     augeas { "remmina-connection-${system_user}-${name}":
