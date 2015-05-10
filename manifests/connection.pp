@@ -17,12 +17,12 @@
 #   or IP-address suffices.
 # [*loginname*]
 #   Login name on the remote server.
-# [*enc_password*]
-#   Encrypted password to use for logging in. It is easiest to derive this from 
-#   a .remmina file created by Remmina itself. This parameter is optional.
 # [*group*]
 #   The connection group to add this connection to. This only affects the 
 #   connection listing in the Remmina GUI.
+# [*enc_password*]
+#   Encrypted password to use for logging in. It is easiest to derive this from 
+#   a .remmina file created by Remmina itself. This parameter is optional.
 # [*protocol*]
 #   The protocol to use for the connection. Defaults to 'RDP'.
 # [*security*]
@@ -35,38 +35,39 @@ define remmina::connection
     $system_user,
     $server,
     $loginname,
-    $enc_password = '',
     $group,
+    $enc_password = undef,
     $protocol = 'RDP',
-    $security = ''
+    $security = undef
 )
 {
-    include remmina::params
+    include ::remmina::params
 
-    $connection_file = "${::os::params::home}/${system_user}/.remmina/${name}.remmina"
+    $remmina_conf_dir = "${::os::params::home}/${system_user}/.remmina"
+    $connection_file = "${remmina_conf_dir}/${name}.remmina"
 
-    $default_changes = [ "set remmina/name ${title}",
-                         "set remmina/server ${server}",
-                         "set remmina/username ${loginname}",
-                         "set remmina/group ${group}",
-                         "set remmina/protocol ${protocol}" ]
+    $default_changes = [    "set remmina/name ${title}",
+                            "set remmina/server ${server}",
+                            "set remmina/username ${loginname}",
+                            "set remmina/group ${group}",
+                            "set remmina/protocol ${protocol}" ]
 
-    if $security == '' {
-        $sec_changes = $default_changes
-    } else {
+    if $security {
         $sec_changes = concat($default_changes, ["set remmina/security ${security}"])
+    } else {
+        $sec_changes = $default_changes
     }
 
-    if $enc_password == '' {
-        $changes = $sec_changes
-    } else {
+    if $enc_password {
         $changes = concat($sec_changes, ["set remmina/password ${enc_password}"])
+    } else {
+        $changes = $sec_changes
     }
 
     augeas { "remmina-connection-${system_user}-${name}":
         context => "/files/${connection_file}",
         changes => $changes,
-        lens => 'Puppet.lns',
-        incl => $connection_file,
+        lens    => 'Puppet.lns',
+        incl    => $connection_file,
     }
 }

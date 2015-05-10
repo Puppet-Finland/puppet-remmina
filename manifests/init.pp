@@ -31,7 +31,7 @@ class remmina
 
 if $manage == 'yes' {
 
-    include remmina::install
+    include ::remmina::install
 
     if $manage_config == 'yes' {
         create_resources('remmina::connection', $connections)

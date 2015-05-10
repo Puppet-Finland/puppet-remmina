@@ -5,11 +5,14 @@
 #
 class remmina::params {
 
-    include os::params
+    include ::os::params
 
     case $::osfamily {
         'Debian': {
-             $package_name = 'remmina'
+            $package_name = 'remmina'
+        }
+        'RedHat': {
+            $package_name = 'remmina'
         }
         default: {
             fail("Unsupported OS: ${::osfamily}")
