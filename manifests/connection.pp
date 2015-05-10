@@ -20,6 +20,9 @@
 # [*group*]
 #   The connection group to add this connection to. This only affects the 
 #   connection listing in the Remmina GUI.
+# [*ensure*]
+#   Status of this connection on the system. Valid values are 'present' 
+#   (default) and 'absent'.
 # [*enc_password*]
 #   Encrypted password to use for logging in. It is easiest to derive this from 
 #   a .remmina file created by Remmina itself. This parameter is optional.
@@ -36,6 +39,7 @@ define remmina::connection
     $server,
     $loginname,
     $group,
+    $ensure = 'present',
     $enc_password = undef,
     $protocol = 'RDP',
     $security = undef
@@ -64,10 +68,28 @@ define remmina::connection
         $changes = $sec_changes
     }
 
-    augeas { "remmina-connection-${system_user}-${name}":
-        context => "/files/${connection_file}",
-        changes => $changes,
-        lens    => 'Puppet.lns',
-        incl    => $connection_file,
+    # Manage the connection file contents with Augeas only if it's supposed to 
+    # be 'present'.
+    if $ensure == 'present' {
+        augeas { "remmina-connection-${system_user}-${name}":
+            context => "/files/${connection_file}",
+            changes => $changes,
+            lens    => 'Puppet.lns',
+            incl    => $connection_file,
+        }
+    }
+
+    # Set connection file permissions
+    $ensure_connection = $ensure ? {
+        'present' => undef,
+        'absent'  => 'absent',
+    }
+
+    file { "remmina-connection-${system_user}-${name}":
+        ensure => $ensure_connection,
+        name   => $connection_file,
+        owner  => $system_user,
+        group  => $system_user,
+        mode   => '0644',
     }
 }

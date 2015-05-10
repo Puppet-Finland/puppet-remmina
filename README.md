@@ -7,10 +7,11 @@ A Puppet module for managing Remmina, a GTK+ remote desktop client
 This module has two entrypoints:
 
 * [Class: remmina](manifests/init.pp)
+* [Define: remmina::userconfig](manifests/userconfig.pp)
 * [Define: remmina::connection](manifests/connection.pp)
 
-Typically you would pass all the remmina::connection resources to the main class 
-via $connections hash parameter.
+Typically you would pass all the remmina::userconfig resources to the main class 
+via $userconfigs hash parameter.
 
 Note that the remmina::connection define only manages a subset of remmina 
 connection details. This has the benefit that the some settings like 
@@ -27,12 +28,12 @@ See [metadata.json](metadata.json).
 This module has been tested on
 
 * Ubuntu 14.04
+* Debian 8
+* Fedora 21
 
 The following operating systems should work out of the box or with small 
 modifications:
 
-* Debian
-* RedHat/CentOS
 * FreeBSD
 
 For details see [params.pp](manifests/params.pp).
