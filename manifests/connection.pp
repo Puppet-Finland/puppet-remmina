@@ -78,6 +78,8 @@ define remmina::connection
             changes => $changes,
             lens    => 'Puppet.lns',
             incl    => $connection_file,
+            require => File[$remmina_conf_dir],
+            before  => File["remmina-connection-${system_user}-${name}"],
         }
     }
 

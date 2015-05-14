@@ -22,8 +22,14 @@ define remmina::userconfig
 
     $basedir = "${::os::params::home}/${system_user}/.remmina"
 
+    $ensure_dir = $ensure ? {
+        'present' => directory,
+        'absent' => 'absent',
+        default => undef,
+    }
+
     file { "remmina-${basedir}":
-        ensure => $ensure,
+        ensure => $ensure_dir,
         name   => $basedir,
         owner  => $system_user,
         group  => $system_user,
