@@ -9,6 +9,10 @@
 # [*manage_config*]
 #   Manage Remmina's configuration using Puppet. Valid values 'yes' (default) 
 #   and 'no'.
+# [*plugins*]
+#   An array of plugins to install. Undefined by default. Valid values are 
+#   'gnome', 'nx', 'rdp', 'telepathy', 'vnc' and 'xdmcp'. At least on Debian 
+#   some of these get pulled in automatically as dependencies.
 # [*userconfigs*]
 #   A hash of remmina::userconfig resources to realize.
 #
@@ -19,6 +23,10 @@
 #   ---
 #   classes:
 #       - remmina
+#
+#   remmina::plugins:
+#       - 'rdp'
+#       - 'vnc'
 #
 #   remmina::userconfigs:
 #       john:
@@ -50,6 +58,7 @@ class remmina
 (
     $manage = 'yes',
     $manage_config = 'yes',
+    $plugins = undef,
     $userconfigs = {}
 
 ) inherits remmina::params
@@ -57,7 +66,9 @@ class remmina
 
 if $manage == 'yes' {
 
-    include ::remmina::install
+    class { '::remmina::install':
+        plugins => $plugins,
+    }
 
     if $manage_config == 'yes' {
         create_resources('remmina::userconfig', $userconfigs)
