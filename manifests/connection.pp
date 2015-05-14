@@ -25,7 +25,9 @@
 #   (default) and 'absent'.
 # [*enc_password*]
 #   Encrypted password to use for logging in. It is easiest to derive this from 
-#   a .remmina file created by Remmina itself. This parameter is optional.
+#   a .remmina file created by Remmina itself. This parameter is optional. Note 
+#   that the encrypted password is not necessarily portable. For example, a 
+#   password that works fine on Debian 8 may not work on Fedora 21.
 # [*protocol*]
 #   The protocol to use for the connection. Defaults to 'RDP'.
 # [*security*]
