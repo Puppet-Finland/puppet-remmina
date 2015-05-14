@@ -27,6 +27,7 @@ See [metadata.json](metadata.json).
 
 This module has been tested on
 
+* Ubuntu 12.04
 * Ubuntu 14.04
 * Debian 8
 * Fedora 21
