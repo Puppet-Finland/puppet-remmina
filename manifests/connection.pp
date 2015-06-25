@@ -17,6 +17,8 @@
 #   or IP-address suffices.
 # [*loginname*]
 #   Login name on the remote server.
+# [*domain*]
+#   The domain to login to. Defaults to undef.
 # [*group*]
 #   The connection group to add this connection to. This only affects the 
 #   connection listing in the Remmina GUI.
@@ -44,6 +46,7 @@ define remmina::connection
     $ensure = 'present',
     $enc_password = undef,
     $protocol = 'RDP',
+    $domain = undef,
     $security = undef
 )
 {
@@ -58,10 +61,16 @@ define remmina::connection
                             "set remmina/group ${group}",
                             "set remmina/protocol ${protocol}" ]
 
-    if $security {
-        $sec_changes = concat($default_changes, ["set remmina/security ${security}"])
+    if $domain {
+        $domain_changes = concat($default_changes, ["set remmina/domain ${domain}"])
     } else {
-        $sec_changes = $default_changes
+        $domain_changes = $default_changes
+    }
+
+    if $security {
+        $sec_changes = concat($domain_changes, ["set remmina/security ${security}"])
+    } else {
+        $sec_changes = $domain_changes
     }
 
     if $enc_password {
