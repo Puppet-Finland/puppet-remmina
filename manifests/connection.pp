@@ -16,7 +16,7 @@
 #   auto-detects the correct port based on the protocol, so usually the hostname 
 #   or IP-address suffices.
 # [*loginname*]
-#   Login name on the remote server.
+#   Login name on the remote server. Defaults to undef.
 # [*domain*]
 #   The domain to login to. Defaults to undef.
 # [*group*]
@@ -41,9 +41,9 @@ define remmina::connection
 (
     $system_user,
     $server,
-    $loginname,
     $group,
     $ensure = 'present',
+    $loginname = undef,
     $enc_password = undef,
     $protocol = 'RDP',
     $domain = undef,
@@ -57,14 +57,19 @@ define remmina::connection
 
     $default_changes = [    "set remmina/name ${title}",
                             "set remmina/server ${server}",
-                            "set remmina/username ${loginname}",
                             "set remmina/group ${group}",
                             "set remmina/protocol ${protocol}" ]
 
-    if $domain {
-        $domain_changes = concat($default_changes, ["set remmina/domain ${domain}"])
+    if $loginname {
+        $loginname_changes = concat($default_changes, ["set remmina/username ${loginname}"])
     } else {
-        $domain_changes = $default_changes
+        $loginname_changes = $default_changes
+    }
+
+    if $domain {
+        $domain_changes = concat($loginname_changes, ["set remmina/domain ${domain}"])
+    } else {
+        $domain_changes = $loginname_changes
     }
 
     if $security {
