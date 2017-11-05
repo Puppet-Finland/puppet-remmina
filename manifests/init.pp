@@ -9,6 +9,9 @@
 # [*manage_config*]
 #   Manage Remmina's configuration using Puppet. Valid values 'yes' (default) 
 #   and 'no'.
+# [*manage_backports*]
+#   Enable Debian Backports on Debian 9. Valid values are true (default) and 
+#   false.
 # [*plugins*]
 #   An array of plugins to install. Undefined by default. Valid values are 
 #   'gnome', 'nx', 'rdp', 'telepathy', 'vnc' and 'xdmcp'. At least on Debian 
@@ -58,6 +61,7 @@ class remmina
 (
     $manage = 'yes',
     $manage_config = 'yes',
+    Boolean $manage_backports = true,
     $plugins = undef,
     $userconfigs = {}
 
@@ -67,7 +71,8 @@ class remmina
 if $manage == 'yes' {
 
     class { '::remmina::install':
-        plugins => $plugins,
+        manage_backports => $manage_backports,
+        plugins          => $plugins,
     }
 
     if $manage_config == 'yes' {
