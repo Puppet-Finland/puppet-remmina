@@ -13,9 +13,9 @@
 #
 define remmina::userconfig
 (
-    $system_user = $title,
-    $ensure = 'present',
-    $connections = {}
+    String                   $system_user = $title,
+    Enum['present','absent'] $ensure = 'present',
+    Hash                     $connections = {}
 )
 {
     include ::remmina::params

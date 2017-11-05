@@ -4,14 +4,10 @@
 #
 class remmina::install
 (
-    $manage_backports,
-    $plugins
+    Boolean                 $manage_backports,
+    Optional[Array[String]] $plugins
 
 ) inherits remmina::params {
-
-    # When we're ready to drop Puppet 3.x support we can validate the array contents using $plugins.each
-    # |$plugin| { ... }.
-    validate_array($plugins)
 
     if $::lsbdistcodename == 'stretch' {
         if $manage_backports {

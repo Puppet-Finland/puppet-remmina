@@ -5,10 +5,10 @@
 # == Parameters
 #
 # [*manage*]
-#   Manage Remmina using this module. Valid values 'yes' (default) and 'no'. 
+#   Manage Remmina using this module. Valid values true (default) and false. 
 # [*manage_config*]
-#   Manage Remmina's configuration using Puppet. Valid values 'yes' (default) 
-#   and 'no'.
+#   Manage Remmina's configuration using Puppet. Valid values true (default) 
+#   and false.
 # [*manage_backports*]
 #   Enable Debian Backports on Debian 9. Valid values are true (default) and 
 #   false.
@@ -59,11 +59,11 @@
 #
 class remmina
 (
-    $manage = 'yes',
-    $manage_config = 'yes',
-    Boolean $manage_backports = true,
-    $plugins = undef,
-    $userconfigs = {}
+    Boolean $manage = true,
+    Boolean $manage_config = true,
+            $manage_backports = true,
+            $plugins = undef,
+    Hash    $userconfigs = {}
 
 ) inherits remmina::params
 {

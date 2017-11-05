@@ -39,15 +39,15 @@
 #
 define remmina::connection
 (
-    $system_user,
-    $server,
-    $group,
-    $ensure = 'present',
-    $loginname = undef,
-    $enc_password = undef,
-    $protocol = 'RDP',
-    $domain = undef,
-    $security = undef
+    String                   $system_user,
+    String                   $server,
+    String                   $group,
+    Enum['present','absent'] $ensure = 'present',
+    Optional[String]         $loginname = undef,
+    Optional[String]         $enc_password = undef,
+    String                   $protocol = 'RDP',
+    Optional[String]         $domain = undef,
+    Optional[Enum['rdp','tls','nla']] $security = undef
 )
 {
     include ::remmina::params
